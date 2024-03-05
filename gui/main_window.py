@@ -41,12 +41,13 @@ class MainWindow(ctk.CTk):
 
 
     def submit_expense(self):
-        # Get the expense amount from the entry and store it
         dialog = ExpensesAmountDialog(self)
         self.wait_window(dialog)
         if dialog.expense_amount:
-            self.expense_amount = dialog.expense_amount
-            self.listbox.insert("end", self.expense_amount)
+            # Format the entry as "Amount - Description"
+            entry_text = f"{dialog.expense_amount} - {dialog.expense_description}"
+            self.listbox.insert("end", entry_text)
+
 
 
     
