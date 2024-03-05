@@ -8,7 +8,7 @@ class CashAmountDialog(ctk.CTkToplevel):
 
         # Textbox for entering the cash amount
         self.cash_amount_entry = ctk.CTkEntry(self)
-        self.cash_amount_entry.pack(pady=10)
+        self.cash_amount_entry.pack(pady=(5))
 
         # Submit button
         self.submit_button = ctk.CTkButton(self, text="Submit", command=self.submit_cash_amount)

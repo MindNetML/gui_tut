@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from gui.cashamount import CashAmountDialog
+from gui.Expenses import ExpensesAmountDialog
 
 class MainWindow(ctk.CTk):
     def __init__(self):
@@ -9,42 +10,26 @@ class MainWindow(ctk.CTk):
         self.create_widgets()
 
     def create_widgets(self):
-        # Expenses label
-        self.expenses = ctk.CTkLabel(self, text="Expense Amount: ")
-        self.expenses.grid(column=0, row=0, padx=10, pady=(20, 5))
-
-        # Expenses entry
-        self.expenses_entry = ctk.CTkEntry(self)
-        self.expenses_entry.grid(column=0, row=1, padx=10, pady=5)
-
-        # Button to submit expenses
-        self.submit_button = ctk.CTkButton(self, text="Submit Expense", command=self.submit_expense)
-        self.submit_button.grid(column=0, row=2, padx=10, pady=20)
-
-        # Current money label, placed on the right of the expense entry and label, in the same row as the expenses label
-        self.current_money = ctk.CTkLabel(self, text="Current Money: ")
-        self.current_money.grid(column=1, row=0, padx=10, pady=(20, 5))
-
-        # money entry
-        self.money_entry = ctk.CTkEntry(self)
-        self.money_entry.grid(column=1, row=1, padx=10, pady=5)
-
-        # Button to submit money
-        self.submit_moneybutton = ctk.CTkButton(self, text="Money", command=self.submit_expense)
-        self.submit_moneybutton.grid(column=1, row=2, padx=10, pady=20)
-
+        # Create a frame for the buttons
+        buttons_frame = ctk.CTkFrame(self)
+        buttons_frame.pack(side='left', padx=10, pady=10, fill='y', anchor='nw')
 
         # Button to open the pop-up for entering cash amount
-        self.add_cash_button = ctk.CTkButton(self, text="Add Cash Amount", command=self.open_cash_dialog)
-        self.add_cash_button.grid(column=2, row=0, padx=10, pady=(20, 5), sticky="ew")
+        self.add_cash_button = ctk.CTkButton(buttons_frame, text="Add Cash Amount", command=self.open_cash_dialog)
+        self.add_cash_button.pack(side='top', fill='x', padx=0, pady=3)
 
-        # Label to display the cash amount
+        # Button to open the pop-up for entering expense amount
+        self.add_expense_button = ctk.CTkButton(buttons_frame, text="Add Expense", command=self.submit_expense)
+        self.add_expense_button.pack(side='top', fill='x', padx=0, pady=3)
+
+        # Label to display the cash amount, positioned in the main window, not in the frame
         self.cash_amount_label = ctk.CTkLabel(self, text="Cash Amount: $0")
-        self.cash_amount_label.grid(column=2, row=1, padx=10, pady=5, sticky="ew")
+        self.cash_amount_label.pack(side='top', padx=0, pady=0, after=buttons_frame)
 
-        # Configure the grid columns
-        # self.grid_columnconfigure(0, weight=1)  # Allow column 0 to expand more than column 1
-        # self.grid_columnconfigure(1, weight=3)  # Column 1 takes less space
+        # Add listbox, positioned in the main window, to take the remaining space
+        self.listbox = ctk.CTkTextbox(self)
+        self.listbox.pack(side='right', fill='both', expand=True, padx=0, pady=0)
+
 
     def open_cash_dialog(self):
         dialog = CashAmountDialog(self)
@@ -56,8 +41,12 @@ class MainWindow(ctk.CTk):
 
 
     def submit_expense(self):
-        # Placeholder function to get the value from the entry and print it
-        amount = self.expenses_entry.get()
-        print(f"Submitting Expense: {amount}")
+        # Get the expense amount from the entry and store it
+        dialog = ExpensesAmountDialog(self)
+        self.wait_window(dialog)
+        if dialog.expense_amount:
+            self.expense_amount = dialog.expense_amount
+            self.listbox.insert("end", self.expense_amount)
+
 
     
